@@ -1,67 +1,101 @@
-body {
-  background-color: #bdbdbd;
-  height: 100vh;
-  display: flex;
+* {
+  box-sizing: border-box;
 }
 
-.screen {
+body {
+  background-color: #8c9eff;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+button {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  outline: none;
+}
+
+.shopping-list {
   width: 400px;
-  height: 600px;
-  margin: auto;
   border-radius: 24px;
   background-color: #e0e0e0;
 }
 
 .header {
-  height: 10%;
+  text-align: center;
   background: linear-gradient(135deg, #e6b8cf 30%, #84b4ec);
-  border-top-left-radius: 24px;
-  border-top-right-radius: 24px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.header span {
+  border-radius: 24px 24px 0 0;
+  font-size: 24px;
+  padding: 8px 0;
   color: white;
-  font-size: 20px;
+  height: 60px;
 }
 
-.main-screen {
-  height: 80%;
-  padding-left: 0;
-  margin: 0;
+.items {
+  height: 500px;
+  overflow-y: auto;
 }
 
-.main-screen li {
-  list-style-type: none;
+.item {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 8px 24px;
 }
 
-input {
+.item__button {
+  transition: all ease-in 300ms;
+}
+
+.item__button:hover {
+  color: red;
+  transform: scale(1.1);
+}
+
+.divider {
+  height: 1px;
+  background-color: gray;
+  width: 90%;
+  margin: auto;
+}
+
+.footer__input {
   width: 100%;
   height: 30px;
   border-style: none;
   padding: 0;
+  font-size: 20px;
 }
 
 input:focus {
   outline: none;
 }
 
-.bottom {
-  height: 10%;
+.footer {
   background: linear-gradient(135deg, #e6b8cf 30%, #84b4ec);
   border-bottom-left-radius: 24px;
   border-bottom-right-radius: 24px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  text-align: center;
 }
 
-.bottom span:hover {
-  cursor: pointer;
+.footer__button {
+  width: 48px;
+  height: 48px;
+  font-size: 24px;
+  margin: 4px;
+  transition: transform ease-in 300ms;
+  background: black;
+  border-radius: 50%;
+  color: white;
+}
+
+.footer__button:hover {
+  transform: scale(1.1);
 }

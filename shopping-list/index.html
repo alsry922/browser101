@@ -8,18 +8,26 @@
     <title>Shopping List</title>
   </head>
   <body>
-    <div class="screen">
-      <header class="header">
-        <span>Shopping List</span>
-      </header>
-      <ul class="main-screen"></ul>
-      <input type="text" />
-      <footer class="bottom">
-        <span class="circle-box">
-          <i class="fas fa-3x fa-plus-circle"></i>
-        </span>
+    <section class="shopping-list">
+      <header class="header">Shopping List</header>
+      <ul class="items">
+        <li class="item-row">
+          <div class="item">
+            <span class="item__name">우유</span>
+            <button class="item__button">
+              <i class="fas fa-trash-alt"></i>
+            </button>
+          </div>
+        </li>
+        <div class="divider"></div>
+      </ul>
+      <footer class="footer">
+        <input type="text" class="footer__input" />
+        <button class="footer__button">
+          <i class="fas fa-plus"></i>
+        </button>
       </footer>
-    </div>
+    </section>
     <script
       src="https://kit.fontawesome.com/9d65493088.js"
       crossorigin="anonymous"
