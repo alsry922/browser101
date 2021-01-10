@@ -2,58 +2,51 @@ const items = document.querySelector(".items");
 const input = document.querySelector(".footer__input");
 const addBtn = document.querySelector(".footer__button");
 
+let id = 0;
+
 addBtn.addEventListener("click", addItem);
+input.addEventListener("keyup", (event) => {
+  if (event.key === "Enter") {
+    addItem();
+  }
+});
+
+items.addEventListener("click", (event) => {
+  if (event.target.nodeName === "I") {
+    const id = event.target.dataset.id;
+    const list = document.querySelector(`.item-row[data-id='${id}']`);
+    list.remove();
+  }
+});
 
 function addItem() {
-  // input값 가져오기
   const text = input.value;
   if (text === "") {
     input.focus();
     return;
   }
-  // item 만들기
   const item = createItem(text);
-  // item 추가하기
   items.appendChild(item);
-  // item 스크롤 따라오게 만듦
   item.scrollIntoView();
-  // input값 비우기
   input.value = "";
-  // focus 유지하기
   input.focus();
 }
 
 function createItem(text) {
   const itemRow = document.createElement("li");
   itemRow.setAttribute("class", "item-row");
+  itemRow.setAttribute("data-id", id);
 
-  const item = document.createElement("div");
-  item.setAttribute("class", "item");
+  itemRow.innerHTML = `
+  <div class="item">
+    <span class="item__name">${text}</span>
+    <button class="item__button">
+      <i class="fas fa-trash-alt" data-id=${id}></i>
+    </button>
+  </div>
+  <div class="divider"></div>
+`;
+  id++;
 
-  const name = document.createElement("span");
-  name.setAttribute("class", "item__name");
-  name.innerText = text;
-
-  const delBtn = document.createElement("button");
-  delBtn.setAttribute("class", "item__button");
-  delBtn.innerHTML = `<i class="fas fa-trash-alt"></i>
-  `;
-  delBtn.addEventListener("click", () => {
-    items.removeChild(itemRow);
-  });
-
-  const divider = document.createElement("div");
-  divider.setAttribute("class", "divider");
-
-  item.appendChild(name);
-  item.appendChild(delBtn);
-  itemRow.appendChild(item);
-  itemRow.appendChild(divider);
   return itemRow;
 }
-
-input.addEventListener("keyup", (event) => {
-  if (event.key === "Enter") {
-    addItem();
-  }
-});
