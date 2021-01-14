@@ -68,11 +68,23 @@ button:hover {
   border: black solid 2px;
 }
 
-.footer {
+.play-box {
   height: 50%;
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.ant {
+  position: absolute;
+}
+
+.carrot {
+  position: absolute;
+}
+
+.carrot:hover {
+  transform: scale(1.1);
 }
 
 .pop-up {
@@ -82,6 +94,7 @@ button:hover {
   background-color: #575106;
   border-radius: 16px;
   position: relative;
+  z-index: 100;
 }
 
 .pop-up__box {
