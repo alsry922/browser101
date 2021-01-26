@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Carrot game</title>
+    <title>Carrot Game</title>
     <link rel="stylesheet" href="style.css" />
     <script src="main.js" defer></script>
     <script
@@ -12,27 +12,17 @@
     ></script>
   </head>
   <body>
-    <main class="background">
-      <header class="user-interface">
-        <button class="user-interface__start">
-          <i class="fas fa-play"></i>
-        </button>
-        <button class="user-interface__stop">
-          <i class="fas fa-stop"></i>
-        </button>
-        <div class="user-interface__timer">00:00</div>
-        <div class="user-interface__remainder">0</div>
+    <section class="game">
+      <header class="game__header">
+        <button class="game__button"><i class="fas fa-play"></i></button>
+        <span class="game__timer">00:00</span>
+        <span class="game__score">0</span>
       </header>
-      <footer class="play-box">
-        <div class="pop-up">
-          <div class="pop-up__box">
-            <button class="redo">
-              <i class="fas fa-redo"></i>
-            </button>
-            <span class="message"></span>
-          </div>
-        </div>
-      </footer>
-    </main>
+      <section class="game__field"></section>
+    </section>
+    <section class="pop-up pop-up--hide">
+      <button class="pop-up__refresh"><i class="fas fa-redo"></i></button>
+      <span class="pop-up__message">REPLAY?</span>
+    </section>
   </body>
 </html>

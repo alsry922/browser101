@@ -1,108 +1,52 @@
-const start = document.querySelector(".user-interface__start");
-const stop = document.querySelector(".user-interface__stop");
-const playBox = document.querySelector(".play-box");
-const playBoxRect = playBox.getBoundingClientRect();
-const popUp = document.querySelector(".pop-up");
-const bgAudio = new Audio("sound/bg.mp3");
-const carrotAudio = new Audio("sound/carrot_pull.mp3");
-const bugAudio = new Audio("sound/bug_pull.mp3");
-const WinAudio = new Audio("sound/game_win.mp3");
-const reDo = document.querySelector(".redo");
-const timer = document.querySelector(".user-interface__timer");
-const remainder = document.querySelector(".user-interface__remainder");
-const message = popUp.querySelector(".message");
-let time = 10;
-let clock;
+const start = document.querySelector(".game__button");
+const field = document.querySelector(".game__field");
+const fieldRect = field.getBoundingClientRect();
+const widthMax = fieldRect.right;
+const widthMin = fieldRect.left;
+const heightMax = fieldRect.bottom;
+const heightMin = fieldRect.top;
+console.log(widthMax, widthMin, heightMax, heightMin);
 
-bgAudio.addEventListener("ended", () => {
-  this.currentTime = 0;
-  this.play();
-});
+start.addEventListener("click", init);
 
-playBox.addEventListener("click", (event) => {
-  const carrots = playBox.querySelectorAll(".carrot");
-  if (carrots.length == 0) {
-    WinAudio.play();
-    message.textContent = `YOU WIN🎉`;
-    bgAudio.currentTime = 0;
-    bgAudio.pause();
-  }
-  if (event.target.dataset.id) {
-    carrotAudio.play();
-    event.target.remove();
-  }
-});
-
-reDo.addEventListener("click", () => {
-  const carrots = playbox.querySelectorAll(".carrots");
-  if (time === 0 || carrots.length == 0) {
-    startGame();
-  }
-  bgAudio.play();
-  popUp.style.display = "none";
-  clock = setInterval(loadTimer, 1000);
-});
-
-start.addEventListener("click", startGame);
-
-stop.addEventListener("click", () => {
-  popUp.style.display = "block";
-  message.textContent = "resume❓";
-  clearInterval(clock);
-  bgAudio.pause();
-});
-function startGame() {
-  start.style.display = "none";
-  stop.style.display = "block";
-  loadCarrot();
-  loadAnt();
-  clock = setInterval(loadTimer, 1000);
-  bgAudio.play();
-}
-function loadAnt() {
-  for (let i = 0; i < 10; i++) {
-    const ant = document.createElement("img");
-    const x = Math.floor(
-      Math.random() * (playBoxRect.right - playBoxRect.left) + playBoxRect.left
-    );
-    const y = Math.floor(
-      Math.random() * (playBoxRect.bottom - playBoxRect.top) + playBoxRect.top
-    );
-    ant.setAttribute("class", "ant");
-    ant.setAttribute("src", "img/bug.png");
-    ant.style.left = `${x}px`;
-    ant.style.top = `${y}px`;
-    playBox.appendChild(ant);
-  }
+function getRandomNum(max, min, range) {
+  return Math.floor(Math.random() * (max - min - range) + min);
 }
 
-function loadCarrot() {
-  for (let i = 0; i < 10; i++) {
+function createCarrot() {
+  for (let i = 0; i < 5; i++) {
+    // const carrot = document.createElement("div");
     const carrot = document.createElement("img");
-    const x = Math.floor(
-      Math.random() * (playBoxRect.right - playBoxRect.left) + playBoxRect.left
-    );
-    const y = Math.floor(
-      Math.random() * (playBoxRect.bottom - playBoxRect.top) + playBoxRect.top
-    );
-    carrot.setAttribute("class", "carrot");
     carrot.setAttribute("src", "img/carrot.png");
-    carrot.setAttribute("data-id", i);
-    carrot.style.left = `${x}px`;
-    carrot.style.top = `${y}px`;
-    playBox.appendChild(carrot);
+    carrot.setAttribute("class", "carrot");
+    carrot.setAttribute("id", i);
+    // const widthRange = carrot.style.width;
+    // const heightRange = carrot.style.height;
+    // console.log(widthRange, heightRange);
+    carrot.style.position = "absolute";
+    carrot.style.left = getRandomNum(widthMax, widthMin, 80) + "px";
+    carrot.style.top = getRandomNum(heightMax, heightMin, 80) + "px";
+    // carrot.appendChild(img);
+    field.appendChild(carrot);
   }
 }
 
-function loadTimer() {
-  timer.textContent = `00:${time}`;
-  time--;
-  if (time < 0) {
-    popUp.style.display = "block";
-    message.textContent = `YOU LOST😜`;
-    bgAudio.currentTime = 0;
-    bgAudio.pause();
-    clearInterval(clock);
-    time = 10;
+function createAnt() {
+  for (let i = 0; i < 5; i++) {
+    const ant = document.createElement("img");
+    ant.setAttribute("class", "ant");
+    ant.setAttribute("id", i);
+    ant.setAttribute("src", "img/bug.png");
+    // const widthRange = ant.style.width;
+    // const heightRange = ant.style.height;
+    ant.style.position = "absolute";
+    ant.style.left = getRandomNum(widthMax, widthMin, 50) + "px";
+    ant.style.top = getRandomNum(heightMax, heightMin, 50) + "px";
+    field.appendChild(ant);
   }
+}
+
+function init() {
+  createCarrot();
+  createAnt();
 }
