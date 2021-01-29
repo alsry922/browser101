@@ -51,6 +51,11 @@ button {
   text-align: center;
   font-weight: 600;
 }
+
+.game__timer--hide {
+  opacity: 0;
+}
+
 .game__score {
   background-color: darksalmon;
   width: 50px;
@@ -62,6 +67,11 @@ button {
   font-size: 32px;
   line-height: 50px;
 }
+
+.game__score--hide {
+  opacity: 0;
+}
+
 .game__field {
   position: relative;
   height: 100%;
