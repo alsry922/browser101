@@ -1,48 +1,40 @@
 "use strict";
 
 const CARROT_SIZE = 80;
+const CARROT_COUNT = 5;
+const BUG_COUNT = 5;
+
 const field = document.querySelector(".game__field");
 const fieldRect = field.getBoundingClientRect();
 const gameButton = document.querySelector(".game__button");
-const timer = document.querySelector(".game__timer");
-const score = document.querySelector(".game__score");
-const popUp = document.querySelector(".pop-up");
-const popUpMessage = document.querySelector(".pop-up__message");
-const popUpRefresh = document.querySelector(".pop-up__refresh");
-let time;
-let timeLimit = 5;
-let gameStatus = false;
+const gameTimer = document.querySelector(".game__timer");
+const gameScore = document.querySelector(".game__score");
 
-gameButton.addEventListener("click", initGame);
-popUpRefresh.addEventListener("click", gameReset);
+let started = false;
+let timer = undefined;
+let score = 0;
 
-// initGame();
+gameButton.addEventListener("click", () => {
+  if (started) {
+    gameStop();
+  } else {
+    gameStart();
+  }
+  started = !started;
+});
+
+function gameStart() {
+  initGame();
+  showStopBtn();
+  showTimerAndScore();
+}
 
 function initGame() {
   //아이템을 생성해서 랜덤배치한다.
-  if (gameStatus === false) {
-    gameStatus = true;
-    gameButton.innerHTML = `<i class="fas fa-stop"></i>`;
-    timer.classList.remove("game__timer--hide");
-    score.classList.remove("game__score--hide");
-    addItem("carrot", 5, "img/carrot.png");
-    addItem("bug", 5, "img/bug.png");
-    timer.textContent = `0:${timeLimit}`;
-    time = setInterval(() => {
-      timeLimit--;
-      timer.textContent = `0:${timeLimit}`;
-      if (timeLimit <= 0) {
-        clearInterval(time);
-        popUp.classList.remove("pop-up--hide");
-        popUpMessage.textContent = "YOU LOST💩";
-      }
-    }, 1000);
-    score.textContent = field.querySelectorAll(".carrot").length;
-  } else {
-    clearInterval(time);
-    popUp.classList.remove("pop-up--hide");
-    popUpMessage.textContent = "REPLAY?😜";
-  }
+  field.innerHTML = "";
+  gameScore.textContent = CARROT_COUNT;
+  addItem("carrot", CARROT_COUNT, "img/carrot.png");
+  addItem("bug", BUG_COUNT, "img/bug.png");
 }
 
 function addItem(className, count, imagePath) {
@@ -67,12 +59,15 @@ function randomNum(min, max) {
   return Math.random() * (max - min) + min;
 }
 
-function gameReset() {
-  field.innerHTML = "";
-  popUp.classList.add("pop-up--hide");
-  timer.classList.add("game__timer--hide");
-  score.classList.add("game__score--hide");
-  gameButton.innerHTML = `<i class="fas fa-play"></i>`;
-  gameStatus = false;
-  timeLimit = 5;
+function showStopBtn() {
+  const btnIcon = gameButton.querySelector(".fa-play");
+  btnIcon.classList.add("fa-stop");
+  btnIcon.classList.remove("fa-play");
 }
+
+function showTimerAndScore() {
+  gameTimer.style.visibility = "visible";
+  gameScore.style.visibility = "visible";
+}
+
+function gameStop() {}

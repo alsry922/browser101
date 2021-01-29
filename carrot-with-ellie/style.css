@@ -50,10 +50,7 @@ button {
   color: black;
   text-align: center;
   font-weight: 600;
-}
-
-.game__timer--hide {
-  opacity: 0;
+  visibility: hidden;
 }
 
 .game__score {
@@ -66,10 +63,7 @@ button {
   font-weight: 600;
   font-size: 32px;
   line-height: 50px;
-}
-
-.game__score--hide {
-  opacity: 0;
+  visibility: hidden;
 }
 
 .game__field {
