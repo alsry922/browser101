@@ -28,7 +28,7 @@ function gameStart() {
   initGame();
   showStopBtn();
   showTimerAndScore();
-  startTimer(5);
+  startTimer();
 }
 
 function initGame() {
@@ -72,7 +72,8 @@ function showTimerAndScore() {
   gameScore.style.visibility = "visible";
 }
 
-function startTimer(time) {
+function startTimer() {
+  time = 5;
   gameTimer.textContent = `0:${time}`;
   timer = setInterval(() => {
     time--;
@@ -83,4 +84,13 @@ function startTimer(time) {
   }, 1000);
 }
 
-function gameStop() {}
+function gameStop() {
+  showPlayBtn();
+  clearInterval(timer);
+}
+
+function showPlayBtn() {
+  const btnIcon = gameButton.querySelector(".fa-stop");
+  btnIcon.classList.add("fa-play");
+  btnIcon.classList.remove("fa-stop");
+}
