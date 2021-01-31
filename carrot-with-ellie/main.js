@@ -3,17 +3,20 @@
 const CARROT_SIZE = 80;
 const CARROT_COUNT = 5;
 const BUG_COUNT = 5;
+const GAME_DURATION = 5;
 
 const field = document.querySelector(".game__field");
 const fieldRect = field.getBoundingClientRect();
 const gameButton = document.querySelector(".game__button");
 const gameTimer = document.querySelector(".game__timer");
 const gameScore = document.querySelector(".game__score");
+const gamePopUp = document.querySelector(".pop-up");
+const popUpMessage = document.querySelector(".pop-up__message");
+const popUpRefresh = document.querySelector(".pop-up__refresh");
 
 let started = false;
 let timer = undefined;
 let score = 0;
-let time;
 
 gameButton.addEventListener("click", () => {
   if (started) {
@@ -28,7 +31,7 @@ function gameStart() {
   initGame();
   showStopBtn();
   showTimerAndScore();
-  startTimer();
+  startGameTimer();
 }
 
 function initGame() {
@@ -72,25 +75,46 @@ function showTimerAndScore() {
   gameScore.style.visibility = "visible";
 }
 
-function startTimer() {
-  time = 5;
-  gameTimer.textContent = `0:${time}`;
+function startGameTimer() {
+  let remainingSec = GAME_DURATION;
+  updateTimerText(remainingSec);
   timer = setInterval(() => {
-    time--;
-    if (time <= 0) {
+    if (remainingSec <= 0) {
       clearInterval(timer);
+      return;
     }
-    gameTimer.textContent = `0:${time}`;
+    updateTimerText(--remainingSec);
   }, 1000);
 }
 
+function updateTimerText(time) {
+  const minute = Math.floor(time / 60);
+  const seconds = time % 60;
+  gameTimer.textContent = `${minute}:${seconds}`;
+}
+
 function gameStop() {
-  showPlayBtn();
+  // showPlayBtn();
+  stopGameTimer();
+  hideGameBtn();
+  showPopUpWithText("REPLAY❓");
+}
+
+function stopGameTimer() {
   clearInterval(timer);
 }
 
-function showPlayBtn() {
-  const btnIcon = gameButton.querySelector(".fa-stop");
-  btnIcon.classList.add("fa-play");
-  btnIcon.classList.remove("fa-stop");
+function hideGameBtn() {
+  gameButton.style.visibility = "hidden";
 }
+
+function showPopUpWithText(text) {
+  gamePopUp.classList.remove("pop-up--hide");
+  popUpMessage.textContent = text;
+}
+
+// function showPlayBtn() {
+//   const btnIcon = gameButton.querySelector(".fa-stop");
+//   btnIcon.classList.add("fa-play");
+//   btnIcon.classList.remove("fa-stop");
+// }
