@@ -16,7 +16,57 @@ const popUpRefresh = document.querySelector(".pop-up__refresh");
 
 let started = false;
 let timer = undefined;
-let score = 0;
+// let score = 0;
+
+popUpRefresh.addEventListener("click", () => {
+  started = !started;
+  hidePopUp();
+  showGameBtn();
+  gameStart();
+});
+
+function hidePopUp() {
+  gamePopUp.classList.add("pop-up--hide");
+}
+
+function showGameBtn() {
+  gameButton.style.visibility = "visible";
+}
+
+field.addEventListener("click", (event) => {
+  const target = event.target;
+  if (target.className === "carrot") {
+    removeCarrot(target);
+    checkRemainedCarrot();
+  } else if (target.className === "bug") {
+    gameLost();
+  }
+});
+
+function removeCarrot(target) {
+  field.removeChild(target);
+}
+
+function checkRemainedCarrot() {
+  const numOfCarrot = field.querySelectorAll(".carrot").length;
+  updateScore(numOfCarrot);
+  console.log(numOfCarrot);
+  if (numOfCarrot === 0) {
+    gameWin();
+  } else {
+    updateScore(numOfCarrot);
+  }
+}
+
+function updateScore(score) {
+  gameScore.textContent = score;
+}
+
+function gameWin() {
+  hideGameBtn();
+  stopGameTimer();
+  showPopUpWithText("YOU WIN🎉");
+}
 
 gameButton.addEventListener("click", () => {
   if (started) {
@@ -35,7 +85,6 @@ function gameStart() {
 }
 
 function initGame() {
-  //아이템을 생성해서 랜덤배치한다.
   field.innerHTML = "";
   gameScore.textContent = CARROT_COUNT;
   addItem("carrot", CARROT_COUNT, "img/carrot.png");
@@ -66,6 +115,7 @@ function randomNum(min, max) {
 
 function showStopBtn() {
   const btnIcon = gameButton.querySelector(".fa-play");
+  if (btnIcon === null) return;
   btnIcon.classList.add("fa-stop");
   btnIcon.classList.remove("fa-play");
 }
@@ -79,12 +129,21 @@ function startGameTimer() {
   let remainingSec = GAME_DURATION;
   updateTimerText(remainingSec);
   timer = setInterval(() => {
+    remainingSec--;
+    updateTimerText(remainingSec);
     if (remainingSec <= 0) {
-      clearInterval(timer);
+      // clearInterval(timer);
+      gameLost();
       return;
     }
-    updateTimerText(--remainingSec);
   }, 1000);
+}
+
+function gameLost() {
+  started = !started;
+  stopGameTimer();
+  hideGameBtn();
+  showPopUpWithText("YOU LOST💩");
 }
 
 function updateTimerText(time) {
@@ -94,7 +153,6 @@ function updateTimerText(time) {
 }
 
 function gameStop() {
-  // showPlayBtn();
   stopGameTimer();
   hideGameBtn();
   showPopUpWithText("REPLAY❓");
@@ -112,9 +170,3 @@ function showPopUpWithText(text) {
   gamePopUp.classList.remove("pop-up--hide");
   popUpMessage.textContent = text;
 }
-
-// function showPlayBtn() {
-//   const btnIcon = gameButton.querySelector(".fa-stop");
-//   btnIcon.classList.add("fa-play");
-//   btnIcon.classList.remove("fa-stop");
-// }

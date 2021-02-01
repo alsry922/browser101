@@ -102,3 +102,7 @@ button {
   font-size: 28px;
   font-weight: 600;
 }
+
+.carrot:hover {
+  transform: scale(1.1);
+}
