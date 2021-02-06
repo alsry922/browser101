@@ -1,4 +1,5 @@
 "use strict";
+import PopUp from "./popup.js";
 
 const CARROT_SIZE = 80;
 const CARROT_COUNT = 5;
@@ -10,9 +11,6 @@ const fieldRect = field.getBoundingClientRect();
 const gameButton = document.querySelector(".game__button");
 const gameTimer = document.querySelector(".game__timer");
 const gameScore = document.querySelector(".game__score");
-const gamePopUp = document.querySelector(".pop-up");
-const popUpMessage = document.querySelector(".pop-up__message");
-const popUpRefresh = document.querySelector(".pop-up__refresh");
 
 const carrotSound = new Audio("sound/carrot_pull.mp3");
 const bugSound = new Audio("sound/bug_pull.mp3");
@@ -24,6 +22,9 @@ let started = false;
 let timer = undefined;
 let score = 0;
 
+const gameFinishBanner = new PopUp();
+gameFinishBanner.setClickListener(gameStart);
+
 field.addEventListener("click", onFieldClick);
 
 gameButton.addEventListener("click", () => {
@@ -32,12 +33,6 @@ gameButton.addEventListener("click", () => {
   } else {
     gameStart();
   }
-});
-
-popUpRefresh.addEventListener("click", () => {
-  hidePopUp();
-  showGameBtn();
-  gameStart();
 });
 
 function gameStart() {
@@ -54,7 +49,7 @@ function gameStop() {
   started = false;
   stopGameTimer();
   hideGameBtn();
-  showPopUpWithText("REPLAY❓");
+  gameFinishBanner.showWithText("REPLAY❓");
   playSound(alertSound);
   stopSound(bgSound);
 }
@@ -69,22 +64,18 @@ function finishGame(win) {
   }
   stopSound(bgSound);
   stopGameTimer();
-  showPopUpWithText(win ? "YOU WON🎉" : "YOU LOST💩");
+  gameFinishBanner.showWithText(win ? "YOU WON🎉" : "YOU LOST💩");
 }
 
 function showStopBtn() {
+  gameButton.style.visibility = "visible";
   const btnIcon = gameButton.querySelector(".fas");
-  // if (btnIcon === null) return;
   btnIcon.classList.add("fa-stop");
   btnIcon.classList.remove("fa-play");
 }
 
 function hideGameBtn() {
   gameButton.style.visibility = "hidden";
-}
-
-function showGameBtn() {
-  gameButton.style.visibility = "visible";
 }
 
 function initGame() {
@@ -114,8 +105,8 @@ function onFieldClick(event) {
 }
 
 function playSound(sound) {
-  sound.currentTime = 0;
   sound.play();
+  sound.currentTime = 0;
 }
 
 function stopSound(sound) {
@@ -175,13 +166,4 @@ function updateTimerText(time) {
   const minute = Math.floor(time / 60);
   const seconds = time % 60;
   gameTimer.textContent = `${minute}:${seconds}`;
-}
-
-function showPopUpWithText(text) {
-  gamePopUp.classList.remove("pop-up--hide");
-  popUpMessage.textContent = text;
-}
-
-function hidePopUp() {
-  gamePopUp.classList.add("pop-up--hide");
 }
