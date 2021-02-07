@@ -1,23 +1,34 @@
 "use strict";
 
+const carrotSound = new Audio("sound/carrot_pull.mp3");
+
 export default class Field {
-  constructor() {
+  constructor(carrotCount, bugCount, carrotSize, bugSize) {
+    this.carrotCount = carrotCount;
+    this.bugCount = bugCount;
+    this.carrotSize = carrotSize;
+    this.bugSize = bugSize;
     this.field = document.querySelector(".game__field");
     this.fieldRect = this.field.getBoundingClientRect();
-    this.field.addEventListener("click", (event) => {
-      this.onFieldClick && this.onFieldClick(event);
-    });
+    this.field.addEventListener("click", this.onClick);
   }
 
-  setClickListener(onFieldClick) {
-    this.onFieldClick = onFieldClick;
+  setClickListener(onItemClick) {
+    this.onItemClick = onItemClick;
   }
 
-  initField() {
+  init() {
     this.field.innerHTML = "";
+    this._addItem(
+      "carrot",
+      this.carrotCount,
+      "img/carrot.png",
+      this.carrotSize
+    );
+    this._addItem("bug", this.bugCount, "img/bug.png", this.bugSize);
   }
 
-  addItem(className, count, imagePath, imgSize) {
+  _addItem(className, count, imagePath, imgSize) {
     const x1 = 0;
     const y1 = 0;
     const x2 = this.fieldRect.width - imgSize;
@@ -27,15 +38,32 @@ export default class Field {
       item.setAttribute("class", className);
       item.setAttribute("src", imagePath);
       item.style.position = "absolute";
-      const left = this.randomNum(x1, x2);
-      const top = this.randomNum(y1, y2);
+      const left = randomNum(x1, x2);
+      const top = randomNum(y1, y2);
       item.style.left = `${left}px`;
       item.style.top = `${top}px`;
       this.field.appendChild(item);
     }
   }
 
-  randomNum(min, max) {
-    return Math.random() * (max - min) + min;
+  onClick(event) {
+    const target = event.target;
+    if (target.matches(".carrot")) {
+      target.remove();
+      playSound(carrotSound);
+      console.log(this.onitemClick);
+      this.onItemClick && this.onItemClick("carrot");
+    } else if (target.matches(".bug")) {
+      this.onItemClick && this.onItemClick("bug");
+    }
   }
+}
+
+function randomNum(min, max) {
+  return Math.random() * (max - min) + min;
+}
+
+function playSound(sound) {
+  sound.play();
+  sound.currentTime = 0;
 }

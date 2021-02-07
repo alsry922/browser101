@@ -8,8 +8,6 @@ const CARROT_COUNT = 5;
 const BUG_COUNT = 5;
 const GAME_DURATION = 5;
 
-// const field = document.querySelector(".game__field");
-// const fieldRect = field.getBoundingClientRect();
 const gameButton = document.querySelector(".game__button");
 const gameTimer = document.querySelector(".game__timer");
 const gameScore = document.querySelector(".game__score");
@@ -27,10 +25,23 @@ let score = 0;
 const gameFinishBanner = new PopUp();
 gameFinishBanner.setClickListener(gameStart);
 
-const gameField = new Field();
-gameField.setClickListener(onFieldClick);
+const gameField = new Field(CARROT_COUNT, BUG_COUNT, CARROT_SIZE, BUG_SIZE);
+gameField.setClickListener(onItemClick);
 
-// field.addEventListener("click", onFieldClick);
+function onItemClick(item) {
+  if (!started) {
+    return;
+  }
+  if (item === "carrot") {
+    score++;
+    updateScoreBoard();
+    if (score === CARROT_COUNT) {
+      finishGame(true);
+    }
+  } else if (item === "bug") {
+    finishGame(false);
+  }
+}
 
 gameButton.addEventListener("click", () => {
   if (started) {
@@ -42,7 +53,6 @@ gameButton.addEventListener("click", () => {
 
 function gameStart() {
   started = true;
-  score = 0;
   initGame();
   showStopBtn();
   showTimerAndScore();
@@ -84,29 +94,9 @@ function hideGameBtn() {
 }
 
 function initGame() {
-  gameField.initField();
+  score = 0;
   gameScore.textContent = CARROT_COUNT;
-  gameField.addItem("carrot", CARROT_COUNT, "img/carrot.png", CARROT_SIZE);
-  gameField.addItem("bug", BUG_COUNT, "img/bug.png", BUG_SIZE);
-}
-
-function onFieldClick(event) {
-  if (!started) {
-    return;
-  }
-
-  const target = event.target;
-  if (target.matches(".carrot")) {
-    target.remove();
-    score++;
-    playSound(carrotSound);
-    updateScoreBoard();
-    if (score === CARROT_COUNT) {
-      finishGame(true);
-    }
-  } else if (target.matches(".bug")) {
-    finishGame(false);
-  }
+  gameField.init();
 }
 
 function playSound(sound) {
@@ -120,28 +110,6 @@ function stopSound(sound) {
 
 function updateScoreBoard() {
   gameScore.textContent = CARROT_COUNT - score;
-}
-
-function addItem(className, count, imagePath) {
-  const x1 = 0;
-  const y1 = 0;
-  const x2 = fieldRect.width - CARROT_SIZE;
-  const y2 = fieldRect.height - CARROT_SIZE;
-  for (let i = 0; i < count; i++) {
-    const item = document.createElement("img");
-    item.setAttribute("class", className);
-    item.setAttribute("src", imagePath);
-    item.style.position = "absolute";
-    const left = randomNum(x1, x2);
-    const top = randomNum(y1, y2);
-    item.style.left = `${left}px`;
-    item.style.top = `${top}px`;
-    field.appendChild(item);
-  }
-}
-
-function randomNum(min, max) {
-  return Math.random() * (max - min) + min;
 }
 
 function showTimerAndScore() {
