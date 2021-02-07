@@ -10,7 +10,7 @@ export default class Field {
     this.bugSize = bugSize;
     this.field = document.querySelector(".game__field");
     this.fieldRect = this.field.getBoundingClientRect();
-    this.field.addEventListener("click", this.onClick);
+    this.field.addEventListener("click", (event) => this.onClick(event));
   }
 
   setClickListener(onItemClick) {
@@ -51,7 +51,7 @@ export default class Field {
     if (target.matches(".carrot")) {
       target.remove();
       playSound(carrotSound);
-      console.log(this.onitemClick);
+      console.log(this.onItemClick);
       this.onItemClick && this.onItemClick("carrot");
     } else if (target.matches(".bug")) {
       this.onItemClick && this.onItemClick("bug");
