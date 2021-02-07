@@ -1,13 +1,15 @@
 "use strict";
 import PopUp from "./popup.js";
+import Field from "./field.js";
 
 const CARROT_SIZE = 80;
+const BUG_SIZE = 50;
 const CARROT_COUNT = 5;
 const BUG_COUNT = 5;
 const GAME_DURATION = 5;
 
-const field = document.querySelector(".game__field");
-const fieldRect = field.getBoundingClientRect();
+// const field = document.querySelector(".game__field");
+// const fieldRect = field.getBoundingClientRect();
 const gameButton = document.querySelector(".game__button");
 const gameTimer = document.querySelector(".game__timer");
 const gameScore = document.querySelector(".game__score");
@@ -25,7 +27,10 @@ let score = 0;
 const gameFinishBanner = new PopUp();
 gameFinishBanner.setClickListener(gameStart);
 
-field.addEventListener("click", onFieldClick);
+const gameField = new Field();
+gameField.setClickListener(onFieldClick);
+
+// field.addEventListener("click", onFieldClick);
 
 gameButton.addEventListener("click", () => {
   if (started) {
@@ -79,10 +84,10 @@ function hideGameBtn() {
 }
 
 function initGame() {
-  field.innerHTML = "";
+  gameField.initField();
   gameScore.textContent = CARROT_COUNT;
-  addItem("carrot", CARROT_COUNT, "img/carrot.png");
-  addItem("bug", BUG_COUNT, "img/bug.png");
+  gameField.addItem("carrot", CARROT_COUNT, "img/carrot.png", CARROT_SIZE);
+  gameField.addItem("bug", BUG_COUNT, "img/bug.png", BUG_SIZE);
 }
 
 function onFieldClick(event) {
